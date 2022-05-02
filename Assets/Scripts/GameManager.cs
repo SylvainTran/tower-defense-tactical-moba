@@ -7,6 +7,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    private void OnEnable()
+    {
+        PlayerManager.OnPlayerHealthIsZero += LevelGameOver;
+    }
+    private void OnDisable()
+    {
+        PlayerManager.OnPlayerHealthIsZero -= LevelGameOver;
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -18,16 +27,13 @@ public class GameManager : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void LevelGameOver()
     {
-        
-    }
+        Debug.Log("Level game over!");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // When the level is over, we simply go to the Lounge and go over the player's results
+        // and choices to promote education about CBT!
+        MetaManager.GoToLounge();
     }
 
     private void OnGUI()
