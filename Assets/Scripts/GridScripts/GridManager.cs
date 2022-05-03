@@ -2,23 +2,53 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[ExecuteAlways]
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
     private Grid _grid;                          // The grid superimposed in the world space
     private RaycastHit _gridHit;                 // The grid hit raycast info struct
     private QuadFactory _quadFactory;            // The quad factory to create a colored tile
     private List<GameObject> _cellQuads;         // List of cell quads instantiated in the scene
     private GameObject[] m_Nodes = new GameObject[6];            // List of user-placed nodes on the grid
+    public GameObject m_GridCellPrefab;
+    public static bool m_CreatedGridCells = false;
+
+    private void CreateGridCells()
+    {
+        for (int x = -25; x < 25; x++)
+        {
+            for (int z = -25; z < 25; z++)
+            {
+                Instantiate(m_GridCellPrefab, new Vector3(x, z, -2.5f), Quaternion.identity, this.transform);
+            }
+        }
+        m_CreatedGridCells = true;
+    }
 
     /// <summary>
     /// Initializes the grid, quad factory, and cell quads list.
     /// </summary>
     private void Start()
     {
-        _grid = new Grid(25, 25, 1, 0);
-        _quadFactory = GetComponent<QuadFactory>();
-        _cellQuads = new List<GameObject>();
+        if (Instance == null)
+        {
+            Instance = this;
+            _grid = new Grid(25, 25, 1, 0);
+            _quadFactory = GetComponent<QuadFactory>();
+            _cellQuads = new List<GameObject>();
+
+            // Generate the empty cells
+            if (!m_CreatedGridCells)
+            {
+                CreateGridCells();
+            }
+            // Make sure everything's aligned for the first run
+            SnapObjectsToGridEditorTime();
+
+            DontDestroyOnLoad(gameObject);
+            return;
+        }
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -35,14 +65,30 @@ public class GridManager : MonoBehaviour
         Ray worldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(worldRay.origin, worldRay.direction * 100, Color.blue);
         
-        bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
+        // bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
 
-        if (hitSomething)
+        RaycastHit[] hits = Physics.RaycastAll(worldRay.origin, worldRay.direction, 100);
+
+        //if (hitSomething)
+        //{
+            // Debug.Log(_gridHit.point.ToString());
+            // TowerDefenseManager.m_CurrentGameObjectClicked = null;
+        //}
+
+        if (hits.Length > 0)
         {
-            // Debug.Log(_gridHit.point.ToString());   
+            foreach(RaycastHit hit in hits)
+            {
+                // Discard placement if there is a node there
+                if (hit.collider.gameObject.CompareTag("Node"))
+                {
+                    return false;
+                }
+                _gridHit = hit; // Takes the last for now
+            }
+            return true;
         }
-
-        return hitSomething;
+        return false;
     }
 
     /// <summary>
@@ -51,9 +97,11 @@ public class GridManager : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
-        HandleObjectPlacement();
+        if (MetaManager.GetCurrentScene() == 2)
+        {
+            HandleObjectPlacement();
+        }
     }
-
     public void HandleObjectPlacement()
     {
         if (RaycastGrid() && Input.GetMouseButtonDown(0))
@@ -63,7 +111,7 @@ public class GridManager : MonoBehaviour
             float y = Mathf.Round(_gridHit.point.y);
             Vector3 pos = new Vector3(x, y, -2.5f);
 
-            Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
+            // Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
             _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
         }
     }
@@ -93,7 +141,7 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
-        SnapObjectsToGridEditorTime();
+        // SnapObjectsToGridEditorTime(); // Uncomment for edit mode snapping
     }
 
     public void SnapObjectsToGridEditorTime()

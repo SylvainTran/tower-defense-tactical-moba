@@ -18,6 +18,10 @@ public class Hud : MonoBehaviour
 
     public void UpdateHealthH()
     {
+        if (m_HealthTextObject == null)
+        {
+            return;
+        }
         m_Sb.Clear();
         m_Sb.Append(m_HealthText);
         m_Sb.Append(PlayerManager.PlayerHealth);

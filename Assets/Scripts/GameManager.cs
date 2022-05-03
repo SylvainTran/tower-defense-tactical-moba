@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerManager.OnPlayerHealthIsZero += LevelGameOver;
     }
+
     private void OnDisable()
     {
         PlayerManager.OnPlayerHealthIsZero -= LevelGameOver;

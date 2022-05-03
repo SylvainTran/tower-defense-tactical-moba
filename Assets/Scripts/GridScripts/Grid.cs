@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using GameEngineProfiler;
 
-public class Grid : ILoggable
+public class Grid : MonoBehaviour, ILoggable
 {
     public readonly int Width;
     public readonly int Length;

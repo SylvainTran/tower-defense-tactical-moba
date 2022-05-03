@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class LoungeManager : MonoBehaviour
 {
+    private void Start()
+    {
+        GameManager.HidePlayerCity(1, false);
+    }
+
     private void OnGUI()
     {
         if (GUI.Button(new Rect(10, 10, 300, 100), "Reset Dialogue State To Origin"))

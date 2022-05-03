@@ -8,7 +8,7 @@ public class PlayerManager : MonoBehaviour
     public static int PlayerHealth = 500;
     public delegate void PlayerHealthIsZero();
     public static event PlayerHealthIsZero OnPlayerHealthIsZero;
-    private Hud m_Hud;
+    public static Hud m_Hud;
 
     private void Start()
     {

@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnMouseDown()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        TowerDefenseManager.m_CurrentGameObjectClicked = this.gameObject;        
     }
 }

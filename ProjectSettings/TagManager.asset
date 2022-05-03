@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Backdrop
   - Node
+  - GridCell
+  - Health Bar
   layers:
   - Default
   - TransparentFX

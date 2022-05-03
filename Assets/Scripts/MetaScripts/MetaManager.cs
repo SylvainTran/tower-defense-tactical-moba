@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MetaManager : MonoBehaviour
 {
+    public static int GetCurrentScene()
+    {
+        return SceneManager.GetActiveScene().buildIndex;
+    }
+
     public static void GoToMainMenu()
     {
         SceneManager.LoadScene((int)SCENES.MAIN_MENU);
