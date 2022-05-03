@@ -2,11 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GameManager))]
 public class PlayerManager : MonoBehaviour
 {
     public static int PlayerHealth = 5;
     public delegate void PlayerHealthIsZero();
     public static event PlayerHealthIsZero OnPlayerHealthIsZero;
+    private Hud m_Hud;
+
+    private void Start()
+    {
+        m_Hud = GetComponent<Hud>();
+    }
 
     private void OnEnable()
     {
@@ -20,10 +27,13 @@ public class PlayerManager : MonoBehaviour
 
     public void RemoveHealth()
     {
-        if (PlayerHealth > 0)
+        if (PlayerHealth > 1)
         {
             UpdateHealth(-1);
-        } else
+            // Update HUD
+            m_Hud.UpdateHealthH();
+        }
+        else
         {
             // Check if game over state, if so lounge or game over screen?        
             OnPlayerHealthIsZero();

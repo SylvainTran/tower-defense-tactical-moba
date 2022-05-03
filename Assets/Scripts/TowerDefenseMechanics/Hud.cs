@@ -10,16 +10,6 @@ public class Hud : MonoBehaviour
     public TMP_Text m_HealthTextObject;
     private StringBuilder m_Sb;
 
-    private void OnEnable()
-    {
-        PathObject.OnReachedPlayerEvent += UpdateHealthH;
-    }
-
-    private void OnDisable()
-    {
-        PathObject.OnReachedPlayerEvent -= UpdateHealthH;
-    }
-
     private void Start()
     {
         m_Sb = new System.Text.StringBuilder();

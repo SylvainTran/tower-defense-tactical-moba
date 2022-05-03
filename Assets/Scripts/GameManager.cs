@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    private static MeshRenderer m_PlayerCityMeshRenderer; // To hide the player's persistent city when going to the Lounge
 
     private void OnEnable()
     {
@@ -22,9 +23,18 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            m_PlayerCityMeshRenderer = FindObjectOfType<PlayerManager>().GetComponent<MeshRenderer>(); // caching it in Awake() ensures scene dependent scripts like TowerDefenseManager.cs get the ref properly in their Start() method
             return;
         }
         Destroy(gameObject);
+    }
+
+    public static void HidePlayerCity(int buildIndex, bool state)
+    {
+        if (SceneManager.GetActiveScene().buildIndex == buildIndex) // Tower Defense
+        {
+            m_PlayerCityMeshRenderer.enabled = state;
+        }
     }
 
     private void LevelGameOver()
@@ -33,6 +43,10 @@ public class GameManager : MonoBehaviour
 
         // When the level is over, we simply go to the Lounge and go over the player's results
         // and choices to promote education about CBT!
+
+        // Hide player game object before leaving
+        HidePlayerCity(2, false);
+
         MetaManager.GoToLounge();
     }
 
