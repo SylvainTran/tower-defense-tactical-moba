@@ -10,6 +10,7 @@ public class Grid : ILoggable
     private int _cellSize;
     private int _groundHeight;
     public readonly float _gridYOffset;
+    public readonly float m_GridOffset = 0.5f;
 
     public int[,] Cells
     {
@@ -52,11 +53,11 @@ public class Grid : ILoggable
         {
             for (int z = -lLen; z < lLen; z++)
             {
-                Vector3 thisCell = new Vector3(x * _cellSize, z * _cellSize, _groundHeight);
-                Vector3 westCell = new Vector3(x-1 * _cellSize, z * _cellSize, _groundHeight);
-                Vector3 eastCell = new Vector3(x+1 * _cellSize, z * _cellSize, _groundHeight);
-                Vector3 northCell = new Vector3(x * _cellSize, z + 1 * _cellSize, _groundHeight);
-                Vector3 southCell = new Vector3(x * _cellSize, z - 1 * _cellSize, _groundHeight);
+                Vector3 thisCell = new Vector3(x * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
+                Vector3 westCell = new Vector3(x-1 * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
+                Vector3 eastCell = new Vector3(x+1 * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
+                Vector3 northCell = new Vector3(x * _cellSize + m_GridOffset, z + 1 * _cellSize + m_GridOffset, _groundHeight);
+                Vector3 southCell = new Vector3(x * _cellSize + m_GridOffset, z - 1 * _cellSize + m_GridOffset, _groundHeight);
                 Debug.DrawLine(thisCell, westCell, Color.red, Single.PositiveInfinity, false);
                 Debug.DrawLine(thisCell, eastCell, Color.red, Single.PositiveInfinity, false);
                 Debug.DrawLine(thisCell, northCell, Color.red, Single.PositiveInfinity, false);
