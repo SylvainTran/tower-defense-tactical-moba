@@ -1,0 +1,29 @@
+﻿title: Start
+tags:
+position: -121,45
+---
+<<set $first_timer to false>>
+
+Newell: Oh, here's a new face.  #line:05388f7 
+Newell: Are you here for the first time? #line:079c343 
+
+-> Yes, I just started the game. #line:0368ace 
+    <<set $first_timer to true>>
+-> No, I know what I'm doing. #line:02422d5 
+
+<<if $first_timer == true>>
+    Newell: Welcome to the Lounge, newcomer.
+    Newell: I'll be your guide, Newell.
+    Newell: In case you're wondering, no, nobody else can see me except you.
+    Newell: Why exactly is a mystery for now...
+
+<<else>>
+    Newell: You can skip to the first level by clicking on the Red Arcade Machine over there
+    Newell: ...on your right, behind that green plant.
+
+<<endif>>
+
+Newell: So, if you're here, it means that you want to learn and practice Cognitive Behavioural Therapy (CBT).
+Newell: And even if that's not the case, feel free to stick around! 
+
+===
