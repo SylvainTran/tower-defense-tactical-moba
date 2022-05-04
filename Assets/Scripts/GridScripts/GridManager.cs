@@ -136,7 +136,7 @@ public class GridManager : MonoBehaviour
         float y = Mathf.Round(gameObject.transform.position.y);
         float z = Mathf.Round(gameObject.transform.position.y);
 
-        Vector3 pos = new Vector3(x, y, z);
+        Vector3 pos = new Vector3(x, y + m_GridYOffset, z);
         if (offset > 0)
         {
             pos.x += offset;
