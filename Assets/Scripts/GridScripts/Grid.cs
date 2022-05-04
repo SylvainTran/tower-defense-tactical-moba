@@ -53,11 +53,11 @@ public class Grid : MonoBehaviour, ILoggable
         {
             for (int z = -lLen; z < lLen; z++)
             {
-                Vector3 thisCell = new Vector3(x * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
-                Vector3 westCell = new Vector3(x-1 * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
-                Vector3 eastCell = new Vector3(x+1 * _cellSize + m_GridOffset, z * _cellSize + m_GridOffset, _groundHeight);
-                Vector3 northCell = new Vector3(x * _cellSize + m_GridOffset, z + 1 * _cellSize + m_GridOffset, _groundHeight);
-                Vector3 southCell = new Vector3(x * _cellSize + m_GridOffset, z - 1 * _cellSize + m_GridOffset, _groundHeight);
+                Vector3 thisCell = new Vector3(x * _cellSize + m_GridOffset, z * _cellSize + 2 * m_GridOffset, _groundHeight);
+                Vector3 westCell = new Vector3(x-1 * _cellSize + m_GridOffset, z * _cellSize + 2 * m_GridOffset, _groundHeight);
+                Vector3 eastCell = new Vector3(x+1 * _cellSize + m_GridOffset, z * _cellSize + 2 * m_GridOffset, _groundHeight);
+                Vector3 northCell = new Vector3(x * _cellSize + m_GridOffset, z + 1 * _cellSize + 2 * m_GridOffset, _groundHeight);
+                Vector3 southCell = new Vector3(x * _cellSize + m_GridOffset, z - 1 * _cellSize + 2 * m_GridOffset, _groundHeight);
                 Debug.DrawLine(thisCell, westCell, Color.red, Single.PositiveInfinity, false);
                 Debug.DrawLine(thisCell, eastCell, Color.red, Single.PositiveInfinity, false);
                 Debug.DrawLine(thisCell, northCell, Color.red, Single.PositiveInfinity, false);

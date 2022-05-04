@@ -5,21 +5,35 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance;
-    private Grid _grid;                          // The grid superimposed in the world space
-    private RaycastHit _gridHit;                 // The grid hit raycast info struct
-    private QuadFactory _quadFactory;            // The quad factory to create a colored tile
-    private List<GameObject> _cellQuads;         // List of cell quads instantiated in the scene
-    private GameObject[] m_Nodes = new GameObject[6];            // List of user-placed nodes on the grid
+
+    #region Grid itself
+    private Grid _grid;                                             // The grid superimposed in the world space
+    private RaycastHit _gridHit;                                    // The grid hit raycast info struct
     public GameObject m_GridCellPrefab;
     public static bool m_CreatedGridCells = false;
+    #endregion
+
+    #region Grid cell size parameters
+    [SerializeField] int m_CellSize = 1;
+    private int m_GridWidth;
+    private int m_GridHeight;
+    private float m_GridYOffset = 0.5f;
+    private float m_GridZDistance = -2.5f;
+    #endregion
+
+    #region Objects put on the grid
+    private QuadFactory _quadFactory;                               // The quad factory to create a colored tile
+    private List<GameObject> _cellQuads;                            // List of cell quads instantiated in the scene
+    private GameObject[] m_Nodes = new GameObject[6];               // List of user-placed nodes on the grid
+    #endregion
 
     private void CreateGridCells()
     {
-        for (int x = -25; x < 25; x++)
+        for (int x = -m_GridWidth; x <= m_GridWidth; x++)
         {
-            for (int z = -25; z < 25; z++)
+            for (int z = -m_GridHeight; z < m_GridHeight; z++)
             {
-                Instantiate(m_GridCellPrefab, new Vector3(x, z, -2.5f), Quaternion.identity, this.transform);
+                Instantiate(m_GridCellPrefab, new Vector3(x, z + m_GridYOffset, m_GridZDistance), Quaternion.identity, this.transform);
             }
         }
         m_CreatedGridCells = true;
@@ -33,7 +47,12 @@ public class GridManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            _grid = new Grid(25, 25, 1, 0);
+
+            float aspectRatio = Camera.main.aspect;
+            m_GridWidth = (int)(Camera.main.orthographicSize * aspectRatio) / m_CellSize;
+            m_GridHeight = (int)Camera.main.orthographicSize / m_CellSize;
+            _grid = new Grid(m_GridWidth, m_GridHeight, m_CellSize, 0);
+
             _quadFactory = GetComponent<QuadFactory>();
             _cellQuads = new List<GameObject>();
 
@@ -69,12 +88,6 @@ public class GridManager : MonoBehaviour
 
         RaycastHit[] hits = Physics.RaycastAll(worldRay.origin, worldRay.direction, 100);
 
-        //if (hitSomething)
-        //{
-            // Debug.Log(_gridHit.point.ToString());
-            // TowerDefenseManager.m_CurrentGameObjectClicked = null;
-        //}
-
         if (hits.Length > 0)
         {
             foreach(RaycastHit hit in hits)
@@ -109,7 +122,8 @@ public class GridManager : MonoBehaviour
             // Snap it to nearest grid cell (lower left corner)
             float x = Mathf.Round(_gridHit.point.x);
             float y = Mathf.Round(_gridHit.point.y);
-            Vector3 pos = new Vector3(x, y, -2.5f);
+
+            Vector3 pos = new Vector3(x, y + m_GridYOffset, m_GridZDistance); // Offset on the Y by 0.5f due to grid placement (first vertex position)
 
             // Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
             _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
@@ -158,7 +172,7 @@ public class GridManager : MonoBehaviour
             SnapToGrid(ref m_Node, offset);
 
             // Clamp to z = -2.5f for optimal visibility in this case
-            m_Node.transform.position = new Vector3(m_Node.transform.position.x, m_Node.transform.position.y, -2.5f);
+            m_Node.transform.position = new Vector3(m_Node.transform.position.x, m_Node.transform.position.y, m_GridZDistance);
         }
     }
 }
