@@ -10,6 +10,17 @@ public class TowerDefenseManager : MonoBehaviour
     /// </summary>
     public static GameObject m_CurrentGameObjectClicked = null;
 
+    private void OnEnable()
+    {
+        Timer.OnTenSecondsReached += ResetPlayerHand;
+        Timer.OnZeroSecondsReached += EndLevel;
+    }
+    private void OnDisable()
+    {
+        Timer.OnTenSecondsReached -= ResetPlayerHand;
+        Timer.OnZeroSecondsReached -= EndLevel;
+    }
+
     void Awake()
     {
         // Show the player's city in this scene
@@ -30,5 +41,16 @@ public class TowerDefenseManager : MonoBehaviour
                 print("Health bar not found!");
             }
         }
+    }
+
+    public void ResetPlayerHand()
+    {
+        print("Resetting player's abilities hand!");
+    }
+
+    public void EndLevel()
+    {
+        print("Level ended.");
+        MetaManager.GoToLounge();
     }
 }
