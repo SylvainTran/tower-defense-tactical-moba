@@ -8,7 +8,7 @@ public class GridManager : MonoBehaviour
 
     #region Grid itself
     private Grid _grid;                                             // The grid superimposed in the world space
-    private RaycastHit _gridHit;                                    // The grid hit raycast info struct
+    private RaycastHit? _gridHit;                                    // The grid hit raycast info struct
     public GameObject m_GridCellPrefab;
     public static bool m_CreatedGridCells = false;
     #endregion
@@ -25,6 +25,7 @@ public class GridManager : MonoBehaviour
     private QuadFactory _quadFactory;                               // The quad factory to create a colored tile
     private List<GameObject> _cellQuads;                            // List of cell quads instantiated in the scene
     private GameObject[] m_Nodes = new GameObject[6];               // List of user-placed nodes on the grid
+    private GameObject selectionIndicator;
     #endregion
 
     private void CreateGridCells()
@@ -33,7 +34,7 @@ public class GridManager : MonoBehaviour
         {
             for (int z = -m_GridHeight; z < m_GridHeight; z++)
             {
-                Instantiate(m_GridCellPrefab, new Vector3(x, z + m_GridYOffset, m_GridZDistance), Quaternion.identity, this.transform);
+                Instantiate(m_GridCellPrefab, new Vector3(x, z, m_GridZDistance), Quaternion.identity, this.transform);
             }
         }
         m_CreatedGridCells = true;
@@ -83,10 +84,11 @@ public class GridManager : MonoBehaviour
         
         Ray worldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(worldRay.origin, worldRay.direction * 100, Color.blue);
-        
-        // bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
 
-        RaycastHit[] hits = Physics.RaycastAll(worldRay.origin, worldRay.direction, 100);
+        // bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
+        int layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+
+        RaycastHit[] hits = Physics.RaycastAll(worldRay);
 
         if (hits.Length > 0)
         {
@@ -97,9 +99,12 @@ public class GridManager : MonoBehaviour
                 {
                     return false;
                 }
-                _gridHit = hit; // Takes the last for now
+                if (hit.collider.gameObject.CompareTag("GridCell"))
+                {
+                    _gridHit = hit;
+                    return true;
+                }
             }
-            return true;
         }
         return false;
     }
@@ -119,14 +124,36 @@ public class GridManager : MonoBehaviour
     {
         if (RaycastGrid() && Input.GetMouseButtonDown(0))
         {
+            if (_gridHit == null)
+            {
+                return;
+            }
             // Snap it to nearest grid cell (lower left corner)
-            float x = Mathf.Round(_gridHit.point.x);
-            float y = Mathf.Round(_gridHit.point.y);
+            float x = Mathf.Round(_gridHit.Value.point.x);
+            float y = Mathf.Round(_gridHit.Value.point.y);
 
-            Vector3 pos = new Vector3(x, y + m_GridYOffset, m_GridZDistance); // Offset on the Y by 0.5f due to grid placement (first vertex position)
+            Vector3 pos = new Vector3(x, y, m_GridZDistance);
 
+            // Spawn things there?
             // Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
-            _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
+            // Temporary display
+            if (selectionIndicator == null)
+            {
+                selectionIndicator = _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
+            } else
+            {
+                selectionIndicator.transform.position = pos;
+            }
+
+            GridCell _gridCell;
+            _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
+            
+            if (!_gridCell.m_HasNode)
+            {
+                TurretFactory.Instance.Create(pos);
+                _gridCell.m_HasNode = true;
+            }
+            _gridHit = null;
         }
     }
 
@@ -136,7 +163,7 @@ public class GridManager : MonoBehaviour
         float y = Mathf.Round(gameObject.transform.position.y);
         float z = Mathf.Round(gameObject.transform.position.y);
 
-        Vector3 pos = new Vector3(x, y + m_GridYOffset, z);
+        Vector3 pos = new Vector3(x, y, z);
         if (offset > 0)
         {
             pos.x += offset;

@@ -5,8 +5,8 @@ using UnityEngine;
 public class GridCell : MonoBehaviour
 {
     public static int ID;
-    private int m_ID;
-    private bool m_HasNode = false;
+    public int m_ID;
+    public bool m_HasNode = false;     // Has a turret or something else placed in it
 
     private void Awake()
     {
@@ -14,10 +14,9 @@ public class GridCell : MonoBehaviour
         m_ID = ID;
     }
 
-    private void OnMouseDown()
+    protected void OnMouseDown()
     {
         // TODO: Display cell texture / mesh renderer enabled instead of instantiating quads!
-
         Debug.Log("Clicked on grid cell ID: " + m_ID);
     }
 }

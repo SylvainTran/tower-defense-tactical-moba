@@ -8,6 +8,9 @@ TagManager:
   - Node
   - GridCell
   - Health Bar
+  - Projectile
+  - Enemy
+  - Turret
   layers:
   - Default
   - TransparentFX
@@ -16,8 +19,8 @@ TagManager:
   - Water
   - UI
   - Node
-  - 
-  - 
+  - Projectile
+  - Turret
   - 
   - 
   - 
