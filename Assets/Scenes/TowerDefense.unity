@@ -703,12 +703,12 @@ PrefabInstance:
     - target: {fileID: 9035337212705612109, guid: ffaa1a91d0e827b4ea77f6f31c962ba8,
         type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: TurretTextObject
       objectReference: {fileID: 0}
     - target: {fileID: 9035337212705612147, guid: ffaa1a91d0e827b4ea77f6f31c962ba8,
         type: 3}
       propertyPath: m_text
-      value: 'Turrets:'
+      value: 'Heroes:'
       objectReference: {fileID: 0}
     - target: {fileID: 9035337212705612147, guid: ffaa1a91d0e827b4ea77f6f31c962ba8,
         type: 3}

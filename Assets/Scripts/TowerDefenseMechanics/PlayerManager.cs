@@ -8,6 +8,9 @@ public class PlayerManager : MonoBehaviour
     public static int PlayerHealth = 500;
     public delegate void PlayerHealthIsZero();
     public static event PlayerHealthIsZero OnPlayerHealthIsZero;
+
+    public static int NumberOfTurrets = 0;
+
     public static Hud m_Hud;
 
     private void Start()
@@ -18,11 +21,13 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         PathObject.OnReachedPlayerEvent += RemoveHealth;
+        GridManager.OnTurretPlacedEvent += IncreaseTurretsCount;
     }
 
     private void OnDisable()
     {
         PathObject.OnReachedPlayerEvent -= RemoveHealth;
+        GridManager.OnTurretPlacedEvent -= IncreaseTurretsCount;
     }
 
     public void RemoveHealth()
@@ -48,5 +53,19 @@ public class PlayerManager : MonoBehaviour
     public void UpdateHealth(int value)
     {
         PlayerHealth += value;
+    }
+
+    public void UpdateTurrets(int value)
+    {
+        NumberOfTurrets += value;
+    }
+
+    public void IncreaseTurretsCount()
+    {
+        if (NumberOfTurrets < 3)
+        {
+            UpdateTurrets(1);
+            m_Hud.UpdateTurretH();
+        }
     }
 }

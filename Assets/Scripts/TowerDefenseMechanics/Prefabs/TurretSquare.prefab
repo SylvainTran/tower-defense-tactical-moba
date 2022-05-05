@@ -98,12 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a748139baa549b543854bd1deffa578a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TurretProjectilePrefab: {fileID: 5038201863965727300, guid: c7f9b97da1a6bca4d9f84c4ce986f156,
-    type: 3}
-  m_TurretSpeed: 5
-  m_TurretDistance: 3
-  m_FireDelay: 0.1
-  m_CurrentTarget: {fileID: 0}
   m_ActorName: 
 --- !u!65 &-2140257496808611375
 BoxCollider:
@@ -128,6 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8531430770379535719}
   - component: {fileID: 4847334555699590414}
+  - component: {fileID: 5517932209403714847}
   m_Layer: 8
   m_Name: DetectionRangeCollider
   m_TagString: Turret
@@ -163,3 +158,21 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5517932209403714847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8761211108588121519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2c0fdf154ea4c429f40804d78a5907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TurretProjectilePrefab: {fileID: 5038201863965727300, guid: c7f9b97da1a6bca4d9f84c4ce986f156,
+    type: 3}
+  m_TurretSpeed: 5
+  m_TurretDistance: 3
+  m_FireDelay: 0.1
+  m_CurrentTarget: {fileID: 0}

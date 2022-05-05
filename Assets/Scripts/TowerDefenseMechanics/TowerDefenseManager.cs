@@ -35,6 +35,18 @@ public class TowerDefenseManager : MonoBehaviour
                 print("Health bar not found!");
             }
         }
+        if (hud.m_TurretTextObject == null)
+        {
+            hud.m_TurretTextObject = GameObject.FindGameObjectWithTag("TurretTextObject").GetComponent<TMP_Text>();
+            if (hud.m_TurretTextObject != null)
+            {
+                print("Turret text object count added");
+            }
+            else
+            {
+                print("Turret text object not found!");
+            }
+        }
     }
 
     private void Start()

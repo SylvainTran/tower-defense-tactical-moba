@@ -33,6 +33,8 @@ public class GridManager : MonoBehaviour
     public Material m_ActorMovedColorMat;                           // Just to show a difference between selecting empty tiles vs. an actor
     public Material m_PlaceableTileColorMat;                        // Red
     public bool m_RaycastHitActor = false;
+    public delegate void TurretPlacedEvent();
+    public static event TurretPlacedEvent OnTurretPlacedEvent;
     #endregion
 
     private void CreateGridCells()
@@ -151,7 +153,7 @@ public class GridManager : MonoBehaviour
         {
             if (RaycastSpecificTile("Node", LayerMask.NameToLayer("Node")))
             {
-                m_RaycastHitActor = false;
+                m_RaycastHitActor = true;
 
                 // Display selector
                 PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
@@ -183,6 +185,9 @@ public class GridManager : MonoBehaviour
                         _gridCell.m_HasNode = true;
                         m_CurrentlyPlacedActors++;
                         PlaceActorIndicator();
+
+                        // Update hud
+                        OnTurretPlacedEvent();
                     }
                 }
             }
