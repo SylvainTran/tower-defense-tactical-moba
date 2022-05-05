@@ -45,6 +45,7 @@ public class TowerDefenseManager : MonoBehaviour
     private void Start()
     {
         GridManager.Instance.SnapObjectsToGridEditorTime();
+        GridManager.Instance.m_CurrentlyPlacedActors = 0; // Reset
     }
 
     public void ResetPlayerHand()

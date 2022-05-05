@@ -22,9 +22,10 @@ public class TurretFactory : MonoBehaviour
         print("Creating a turret!");
         Instantiate(TurretPrefab, gameObject.transform.position, Quaternion.identity);
     }
-    public void Create(Vector3 position)
+    public GameObject Create(Vector3 position)
     {
         print("Creating a turret!");
-        Instantiate(TurretPrefab, position, Quaternion.identity);
+        GameObject newTurret = Instantiate(TurretPrefab, position, Quaternion.identity);
+        return newTurret;
     }
 }

@@ -25,8 +25,11 @@ public class GridManager : MonoBehaviour
     private QuadFactory _quadFactory;                               // The quad factory to create a colored tile
     private List<GameObject> _cellQuads;                            // List of cell quads instantiated in the scene
     private GameObject[] m_Nodes = new GameObject[6];               // List of user-placed nodes on the grid
-    private GameObject[] m_PlacableTiles = new GameObject[6];               // List of designer-placed placable tiles on the grid
+    private GameObject[] m_PlacableTiles = new GameObject[6];       // List of designer-placed placable tiles on the grid
     private GameObject selectionIndicator;
+    public int m_MaxPlaceableActors = 3;                            // Max amount of placeable actors on a level = should depend on the level itself. Test # for now
+    public int m_CurrentlyPlacedActors = 0;
+    public static GameObject m_CurrentlySelectedActor = null;
     #endregion
 
     private void CreateGridCells()
@@ -107,6 +110,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        m_CurrentlySelectedActor = null;            // Deselect currently selected actor if clicked anywhere else on the backdrop
         return false;
     }
 
@@ -129,32 +133,47 @@ public class GridManager : MonoBehaviour
             {
                 return;
             }
-            // Snap it to nearest grid cell (lower left corner)
-            float x = Mathf.Round(_gridHit.Value.point.x);
-            float y = Mathf.Round(_gridHit.Value.point.y);
-
-            Vector3 pos = new Vector3(x, y, m_GridZDistance);
-
+            
             // Spawn things there?
             // Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
-            // Temporary display
-            if (selectionIndicator == null)
-            {
-                //selectionIndicator = _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
-            } else
-            {
-                //selectionIndicator.transform.position = pos;
-            }
 
             GridCell _gridCell;
             _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
             
-            if (!_gridCell.m_HasNode)
+            if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
             {
-                TurretFactory.Instance.Create(pos);
+                // Snap it to nearest grid cell (lower left corner)
+                m_CurrentlySelectedActor = TurretFactory.Instance.Create(GetActorSnappedGridPos());
                 _gridCell.m_HasNode = true;
+                m_CurrentlyPlacedActors++;
+                PlaceActorIndicator();
             }
             _gridHit = null;
+        }
+    }
+
+    public Vector3 GetActorSnappedGridPos()
+    {
+        float x = Mathf.Round(_gridHit.Value.point.x);
+        float y = Mathf.Round(_gridHit.Value.point.y);
+
+        return new Vector3(x, y, m_GridZDistance);
+    }
+
+    public void PlaceActorIndicator()
+    {
+        if (m_CurrentlySelectedActor == null)
+        {
+            return;
+        }
+        // Temporary display
+        if (selectionIndicator == null)
+        {
+            selectionIndicator = _quadFactory.CreateQuad(m_CurrentlySelectedActor.transform.position, _grid, ref _cellQuads);
+        }
+        else
+        {
+            selectionIndicator.transform.position = GetActorSnappedGridPos();
         }
     }
 

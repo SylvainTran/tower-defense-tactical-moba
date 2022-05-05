@@ -9,16 +9,31 @@ public class Turret : MonoBehaviour
     public float m_TurretDistance = 3.0f;
     public float m_FireDelay = 0.1f;
     public GameObject m_CurrentTarget;
+    public string m_ActorName;
+
+    public static int TurretCount = 0;
+
+    private void Awake()
+    {
+        TurretCount++;
+    }
 
     private void Start()
     {
         // print("New turret cell created!");
+        m_ActorName = "Hero Character " + TurretCount;
     }
     protected void OnMouseDown()
     {
         print("Turret info log UI activated!");
         // TODO: Select hero/actor state
+        GridManager.m_CurrentlySelectedActor = this.gameObject;
+
+        // Display indicator
+        GridManager.Instance.PlaceActorIndicator();
+
         // Display its info
+        print("Selected actor info: Name =" + m_ActorName);
     }
 
     private void OnTriggerEnter(Collider other)

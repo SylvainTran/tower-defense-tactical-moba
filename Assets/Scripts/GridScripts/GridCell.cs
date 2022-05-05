@@ -17,6 +17,6 @@ public class GridCell : MonoBehaviour
     protected void OnMouseDown()
     {
         // TODO: Display cell texture / mesh renderer enabled instead of instantiating quads!
-        Debug.Log("Clicked on grid cell ID: " + m_ID);
+        // Debug.Log("Clicked on grid cell ID: " + m_ID);
     }
 }
