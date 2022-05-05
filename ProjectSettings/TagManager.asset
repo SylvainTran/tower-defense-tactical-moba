@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - Turret
   - PlacableActorTile
+  - TurretBody
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Node
   - Projectile
   - Turret
-  - 
-  - 
+  - PlaceableActorTile
+  - GridCell
   - 
   - 
   - 

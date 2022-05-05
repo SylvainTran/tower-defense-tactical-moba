@@ -25,17 +25,7 @@ public class Turret : MonoBehaviour
     }
     protected void OnMouseDown()
     {
-        print("Turret info log UI activated!");
-        // TODO: Select hero/actor state
-        GridManager.m_CurrentlySelectedActor = this.gameObject;
 
-        // Display indicator
-        if (GridManager.Instance._gridHit.HasValue)
-        {
-            GridManager.Instance.PlaceActorIndicator();
-        }
-        // Display its info
-        print("Selected actor info: Name =" + m_ActorName);
     }
 
     private void OnTriggerEnter(Collider other)

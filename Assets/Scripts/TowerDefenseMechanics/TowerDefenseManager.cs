@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class TowerDefenseManager : MonoBehaviour
 {
-    /// <summary>
-    /// Used to validate turret placement on Raycast hitting a grid cell
-    /// </summary>
-    public static GameObject m_CurrentGameObjectClicked = null;
-
     private void OnEnable()
     {
         Timer.OnTenSecondsReached += ResetPlayerHand;

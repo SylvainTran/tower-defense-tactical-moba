@@ -30,7 +30,7 @@ public class GridManager : MonoBehaviour
     public int m_MaxPlaceableActors = 3;                            // Max amount of placeable actors on a level = should depend on the level itself. Test # for now
     public int m_CurrentlyPlacedActors = 0;
     public static GameObject m_CurrentlySelectedActor = null;
-    public Material m_ActorMovedColorMat;                        // Just to show a difference between selecting empty tiles vs. an actor
+    public Material m_ActorMovedColorMat;                           // Just to show a difference between selecting empty tiles vs. an actor
     public Material m_PlaceableTileColorMat;                        // Red
     public bool m_RaycastHitActor = false;
     #endregion
@@ -83,30 +83,47 @@ public class GridManager : MonoBehaviour
     /// Stores the hit info in the class member _gridHit.
     /// </summary>
     /// <returns>True if hit a collider.</returns>
-    private bool RaycastPlaceableTile()
+    private bool RaycastSpecificTile(string tag, int targetLayer)
     {
         // Test raycast into grid cells
-
         if (Camera.main == null) return false;
         
         Ray worldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(worldRay.origin, worldRay.direction * 100, Color.blue);
 
-        // bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
-        int layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
-
-        RaycastHit[] hits = Physics.RaycastAll(worldRay, 100, layerMask);
+        RaycastHit[] hits = Physics.RaycastAll(worldRay, 100, 1 << targetLayer);
 
         if (hits.Length > 0)
         {
             foreach(RaycastHit hit in hits)
             {
-                // Discard placement if there is a node there
-                if (hit.collider.gameObject.CompareTag("Node"))
+                if (hit.collider.gameObject.CompareTag(tag))
                 {
-                    return false;
+                    _gridHit = hit;
+                    return true;
                 }
-                if (hit.collider.gameObject.CompareTag("PlacableActorTile"))
+            }
+        }
+        _gridHit = null;
+        return false;
+    }
+
+    // Also checks for a specific colliderObject name (i.e., useful for turrets that have 2 colliders)
+    private bool RaycastSpecificTile(string colliderObjectName, string tag, int targetLayer)
+    {
+        // Test raycast into grid cells
+        if (Camera.main == null) return false;
+
+        Ray worldRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(worldRay.origin, worldRay.direction * 100, Color.blue);
+
+        RaycastHit[] hits = Physics.RaycastAll(worldRay, 100, 1 << targetLayer);
+
+        if (hits.Length > 0)
+        {
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider.gameObject.CompareTag(tag) && hit.collider.gameObject.name == colliderObjectName)
                 {
                     _gridHit = hit;
                     return true;
@@ -132,12 +149,17 @@ public class GridManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (RaycastPlaceableTile())
+            if (RaycastSpecificTile("Node", LayerMask.NameToLayer("Node")))
             {
-                if (_gridHit == null)
-                {
-                    return;
-                }
+                m_RaycastHitActor = true;
+
+                // Display selector
+                PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
+                return;
+            } // Exit right away!
+            if (RaycastSpecificTile("PlacableActorTile", LayerMask.NameToLayer("PlaceableActorTile")))
+            {
+                m_RaycastHitActor = true;
 
                 // Display selector
                 PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
@@ -154,18 +176,37 @@ public class GridManager : MonoBehaviour
                     m_CurrentlyPlacedActors++;
                     PlaceActorIndicator();
                 }
-                else
-                {
-                    DeselectCurrentlySelectedActor();
-                }
-                _gridHit = null;
             }
-            else
+            if (RaycastSpecificTile("TurretBody", LayerMask.NameToLayer("Turret")))
             {
-                DeselectCurrentlySelectedActor();
-                HideSelector();
+                m_RaycastHitActor = true;
+
+                print("Turret info log UI activated!");
+
+                GameObject actor = _gridHit.Value.collider.gameObject;
+                // TODO: Select hero/actor state
+                m_CurrentlySelectedActor = actor;
+
+                // Display indicator
+                PlaceActorIndicator();
+
+                // Display its info
+                print("Selected actor info: Name =" + actor.GetComponent<Turret>().m_ActorName);
+                return;
             }
+            HandleDeselection();
         }
+    }
+
+    private void HandleDeselection()
+    {
+        if (!m_RaycastHitActor)
+        {
+            DeselectCurrentlySelectedActor();
+            HideSelector();
+            _gridHit = null;
+        }
+        m_RaycastHitActor = false;
     }
 
     private void DeselectCurrentlySelectedActor()

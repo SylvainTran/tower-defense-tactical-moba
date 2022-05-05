@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5659411744134508215}
   - component: {fileID: 5659411744134508214}
   - component: {fileID: 6404638886515656151}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GridCell
   m_TagString: GridCell
   m_Icon: {fileID: 0}
@@ -110,3 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f215e8a96e8f8946bb610ac85653ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ID: 0
+  m_HasNode: 0
