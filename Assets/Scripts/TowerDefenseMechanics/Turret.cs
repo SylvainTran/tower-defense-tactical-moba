@@ -30,8 +30,10 @@ public class Turret : MonoBehaviour
         GridManager.m_CurrentlySelectedActor = this.gameObject;
 
         // Display indicator
-        GridManager.Instance.PlaceActorIndicator();
-
+        if (GridManager.Instance._gridHit.HasValue)
+        {
+            GridManager.Instance.PlaceActorIndicator();
+        }
         // Display its info
         print("Selected actor info: Name =" + m_ActorName);
     }

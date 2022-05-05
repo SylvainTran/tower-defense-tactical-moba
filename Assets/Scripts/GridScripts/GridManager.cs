@@ -8,7 +8,7 @@ public class GridManager : MonoBehaviour
 
     #region Grid itself
     private Grid _grid;                                             // The grid superimposed in the world space
-    private RaycastHit? _gridHit;                                    // The grid hit raycast info struct
+    public RaycastHit? _gridHit;                                    // The grid hit raycast info struct
     public GameObject m_GridCellPrefab;
     public static bool m_CreatedGridCells = false;
     #endregion
@@ -30,6 +30,9 @@ public class GridManager : MonoBehaviour
     public int m_MaxPlaceableActors = 3;                            // Max amount of placeable actors on a level = should depend on the level itself. Test # for now
     public int m_CurrentlyPlacedActors = 0;
     public static GameObject m_CurrentlySelectedActor = null;
+    public Material m_ActorMovedColorMat;                        // Just to show a difference between selecting empty tiles vs. an actor
+    public Material m_PlaceableTileColorMat;                        // Red
+    public bool m_RaycastHitActor = false;
     #endregion
 
     private void CreateGridCells()
@@ -80,7 +83,7 @@ public class GridManager : MonoBehaviour
     /// Stores the hit info in the class member _gridHit.
     /// </summary>
     /// <returns>True if hit a collider.</returns>
-    private bool RaycastGrid()
+    private bool RaycastPlaceableTile()
     {
         // Test raycast into grid cells
 
@@ -110,7 +113,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-        m_CurrentlySelectedActor = null;            // Deselect currently selected actor if clicked anywhere else on the backdrop
+        _gridHit = null;
         return false;
     }
 
@@ -127,37 +130,79 @@ public class GridManager : MonoBehaviour
     }
     public void HandleObjectPlacement()
     {
-        if (RaycastGrid() && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if (_gridHit == null)
+            if (RaycastPlaceableTile())
             {
-                return;
-            }
-            
-            // Spawn things there?
-            // Debug.Log($"[GameEngine.cs/LateUpdate]: Hit grid cell at world x: {x}.");
+                if (_gridHit == null)
+                {
+                    return;
+                }
 
-            GridCell _gridCell;
-            _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
-            
-            if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
-            {
-                // Snap it to nearest grid cell (lower left corner)
-                m_CurrentlySelectedActor = TurretFactory.Instance.Create(GetActorSnappedGridPos());
-                _gridCell.m_HasNode = true;
-                m_CurrentlyPlacedActors++;
-                PlaceActorIndicator();
+                // Display selector
+                PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
+
+                // Check if can place actor
+                GridCell _gridCell;
+                _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
+
+                if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
+                {
+                    // Snap it to nearest grid cell (lower left corner)
+                    m_CurrentlySelectedActor = TurretFactory.Instance.Create(GetSelectorSnappedGridPos());
+                    _gridCell.m_HasNode = true;
+                    m_CurrentlyPlacedActors++;
+                    PlaceActorIndicator();
+                }
+                else
+                {
+                    DeselectCurrentlySelectedActor();
+                }
+                _gridHit = null;
             }
-            _gridHit = null;
+            else
+            {
+                DeselectCurrentlySelectedActor();
+                HideSelector();
+            }
         }
     }
 
-    public Vector3 GetActorSnappedGridPos()
+    private void DeselectCurrentlySelectedActor()
+    {
+        m_CurrentlySelectedActor = null;  // Deselect also because user is trying to select a placeable tile to create a new actor
+    }
+
+    private void HideSelector()
+    {
+        if (selectionIndicator != null)
+        {
+            selectionIndicator.transform.position = new Vector3(1000, 1000, 1000);
+        }
+
+        print("Hiding selector");
+    }
+
+    public Vector3 GetSelectorSnappedGridPos()
     {
         float x = Mathf.Round(_gridHit.Value.point.x);
         float y = Mathf.Round(_gridHit.Value.point.y);
 
         return new Vector3(x, y, m_GridZDistance);
+    }
+
+    public void PlaceSelectedTileIndicator(Vector3 position)
+    {
+        // Temporary display
+        if (selectionIndicator == null)
+        {
+            selectionIndicator = _quadFactory.CreateQuad(position, _grid, ref _cellQuads);
+        }
+        else
+        {
+            selectionIndicator.transform.position = GetSelectorSnappedGridPos();
+        }
+        selectionIndicator.GetComponent<MeshRenderer>().material = m_PlaceableTileColorMat;
     }
 
     public void PlaceActorIndicator()
@@ -166,15 +211,8 @@ public class GridManager : MonoBehaviour
         {
             return;
         }
-        // Temporary display
-        if (selectionIndicator == null)
-        {
-            selectionIndicator = _quadFactory.CreateQuad(m_CurrentlySelectedActor.transform.position, _grid, ref _cellQuads);
-        }
-        else
-        {
-            selectionIndicator.transform.position = GetActorSnappedGridPos();
-        }
+        PlaceSelectedTileIndicator(m_CurrentlySelectedActor.transform.position);
+        selectionIndicator.GetComponent<MeshRenderer>().material = m_ActorMovedColorMat;
     }
 
     public void SnapToGrid(ref GameObject gameObject, float offset)

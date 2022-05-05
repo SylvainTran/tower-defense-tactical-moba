@@ -23355,12 +23355,12 @@ PrefabInstance:
     - target: {fileID: 5659411744134508213, guid: a98295900f1ec314397e221799526e68,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.31
+      value: -6.26
       objectReference: {fileID: 0}
     - target: {fileID: 5659411744134508213, guid: a98295900f1ec314397e221799526e68,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.87
+      value: -8.64
       objectReference: {fileID: 0}
     - target: {fileID: 5659411744134508213, guid: a98295900f1ec314397e221799526e68,
         type: 3}
@@ -99516,6 +99516,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5659411744134508209, guid: a98295900f1ec314397e221799526e68,
         type: 3}
+    - target: {fileID: 9121048480409309594, guid: 2f3e916b20f980247a97cf5a1dc7ae42,
+        type: 3}
+      propertyPath: m_ActorSelectedColorMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 30535411795965e45b9cdbb3af80ae34, type: 2}
+    - target: {fileID: 9121048480409309594, guid: 2f3e916b20f980247a97cf5a1dc7ae42,
+        type: 3}
+      propertyPath: m_PlaceableTileColorMat
+      value: 
+      objectReference: {fileID: 2100000, guid: ff15c6be1957c8a4a96a42d0848f22b5, type: 2}
     - target: {fileID: 9121048480409309595, guid: 2f3e916b20f980247a97cf5a1dc7ae42,
         type: 3}
       propertyPath: m_RootOrder
