@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TowerDefenseManager : MonoBehaviour
 {
+    public static TowerDefenseManager Instance;
+
     private void OnEnable()
     {
         Timer.OnTenSecondsReached += ResetPlayerHand;
@@ -17,6 +19,16 @@ public class TowerDefenseManager : MonoBehaviour
     }
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+        }
+
         // Show the player's city in this scene
         GameManager.HidePlayerCity(2, true);
 

@@ -10,8 +10,18 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: 053561912b1654d80a424bb0696a74ae, type: 3}
   sourceScripts:
   - {fileID: 6391573757903218779, guid: 7f77ebd937f37564190b26ed233a2813, type: 3}
+  - {fileID: 6391573757903218779, guid: 9730070574419bf408a9239ec49a2757, type: 3}
   compileErrors: []
-  serializedDeclarations: []
+  serializedDeclarations:
+  - name: $first_timer
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in MeetingThePlayer.yarn, node Start
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 7f77ebd937f37564190b26ed233a2813,
+      type: 3}
   defaultLanguage: en-CA
   languagesToSourceAssets: []
   useAddressableAssets: 0

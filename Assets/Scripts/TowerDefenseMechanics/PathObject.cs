@@ -12,7 +12,7 @@ public class PathObject : MonoBehaviour
 
     [SerializeField] float m_TravelStartDelay = 0.1f;
 
-    [SerializeField] float m_TravelSpeed = 5f;
+    public float m_TravelSpeed = 5f; // slowed down during dialogue/encounters with hero projectiles/attacks!
 
     private bool m_StartTravel = false;
 

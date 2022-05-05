@@ -7,6 +7,8 @@ public class LoungeManager : MonoBehaviour
     private void Start()
     {
         GameManager.HidePlayerCity(1, false);
+        // Retrieve results of last TowerDefense level (Yarn InMemory storage vars)
+        // Review them with player... node by node
     }
 
     private void OnGUI()

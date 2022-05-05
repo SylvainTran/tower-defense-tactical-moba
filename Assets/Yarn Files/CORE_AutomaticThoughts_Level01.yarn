@@ -1,0 +1,34 @@
+﻿title: CORE_AutomaticThoughts_Level01_01
+tags:
+---
+<<set $action_outcome to false>>
+
+Anxiety: The world is a bad place.
+
+-> ... If it was true, then why are there so many good people and things in life?
+    HeroA: ***Your attack landed!*** 
+    Anxiety: I-I... You defeated me.
+    <<set $action_outcome to true>>
+
+-> ... Maybe you're right. Maybe I should hide inside all day long.
+    Anxiety: ***Your attack missed!***
+
+===
+
+title: CORE_AutomaticThoughts_Level01_02
+tags:
+---
+<<set $action_outcome to false>>
+
+Depression: I'm never going to be liked by someone.
+
+-> ... That is unlikely.
+    HeroA: ***Your attack landed!*** 
+    Depression: Most people are liked by someone.
+    <<set $action_outcome to true>>
+
+-> ... Only if I behave well.
+    HeroA: ***Your attack missed!***
+    Depression: Being liked is unconditional.
+
+===

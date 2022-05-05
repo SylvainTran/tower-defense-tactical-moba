@@ -37,6 +37,10 @@ public class GridManager : MonoBehaviour
     public static event TurretPlacedEvent OnTurretPlacedEvent;
     #endregion
 
+    #region Level specific characters and parameters to know about
+    LevelScriptManager LevelScriptManager;
+    #endregion
+
     private void CreateGridCells()
     {
         for (int x = -m_GridWidth; x <= m_GridWidth; x++)
@@ -73,6 +77,14 @@ public class GridManager : MonoBehaviour
             }
             // Make sure everything's aligned for the first run
             SnapObjectsToGridEditorTime();
+
+            // Set a active hero
+            LevelScriptManager = LevelScriptManager.Instance;
+
+            if (LevelScriptManager.HeroesInPlay.Length > 0)
+            {
+                m_CurrentAction = LevelScriptManager.HeroesInPlay[0];
+            }
 
             DontDestroyOnLoad(gameObject);
             return;
@@ -175,24 +187,28 @@ public class GridManager : MonoBehaviour
                 else
                 {
                     // Check if can place actor
-                    GridCell _gridCell;
-                    _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
-
-                    if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
+                    if (LevelScriptManager.HeroesInPlay.Length == 0)
                     {
-                        // Snap it to nearest grid cell (lower left corner)
-                        m_CurrentAction = TurretFactory.Instance.Create(GetSelectorSnappedGridPos());
-                        _gridCell.m_HasNode = true;
-                        m_CurrentlyPlacedActors++;
-                        PlaceActorIndicator();
+                        // Then this is a Scripted/pre-designed character level, can't place more heroes (for now)
+                        GridCell _gridCell;
+                        _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
 
-                        // Update hud
-                        OnTurretPlacedEvent();
+                        if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
+                        {
+                            // Snap it to nearest grid cell (lower left corner)
+                            m_CurrentAction = TurretFactory.Instance.Create(GetSelectorSnappedGridPos());
+                            _gridCell.m_HasNode = true;
+                            m_CurrentlyPlacedActors++;
+                            PlaceActorIndicator();
+
+                            // Update hud
+                            OnTurretPlacedEvent();
+                        }
                     }
                 }
             }
             // Notice that it's the turret's body that has the box collider that we want, otherwise could hit its sphere collider (the hero's detection or attack radius)
-            if (RaycastSpecificTile("TurretBody", LayerMask.NameToLayer("Turret")))
+            if (RaycastSpecificTile("Hero", LayerMask.NameToLayer("Turret")))
             {
                 m_RaycastHitActor = true;
 
