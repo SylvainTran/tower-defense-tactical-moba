@@ -25,6 +25,9 @@ Tower defense part:
 
 1. Bennett-Levy, J. (2003). Mechanisms of change in cognitive therapy: The case of automatic thought records and behavioural experiments. Behavioural and Cognitive Psychotherapy, 31(3), 261-277.
 
+Enemies turn into heroes? (Beyond scope...)
+Can speak to heroes in lounge?
+
 Home work screen parts:
 
 - Socratic thoughts
