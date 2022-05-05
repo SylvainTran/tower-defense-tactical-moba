@@ -20,8 +20,7 @@ public class TowerDefenseManager : MonoBehaviour
         Timer.OnTenSecondsReached -= ResetPlayerHand;
         Timer.OnZeroSecondsReached -= EndLevel;
     }
-
-    void Awake()
+    private void Awake()
     {
         // Show the player's city in this scene
         GameManager.HidePlayerCity(2, true);
@@ -41,6 +40,11 @@ public class TowerDefenseManager : MonoBehaviour
                 print("Health bar not found!");
             }
         }
+    }
+
+    private void Start()
+    {
+        GridManager.Instance.SnapObjectsToGridEditorTime();
     }
 
     public void ResetPlayerHand()
