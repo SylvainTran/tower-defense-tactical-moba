@@ -12,11 +12,13 @@ public class Turret : MonoBehaviour
 
     private void Start()
     {
-        print("New turret cell created!");
+        // print("New turret cell created!");
     }
     protected void OnMouseDown()
     {
         print("Turret info log UI activated!");
+        // TODO: Select hero/actor state
+        // Display its info
     }
 
     private void OnTriggerEnter(Collider other)

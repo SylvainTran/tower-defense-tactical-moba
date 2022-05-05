@@ -25,6 +25,7 @@ public class GridManager : MonoBehaviour
     private QuadFactory _quadFactory;                               // The quad factory to create a colored tile
     private List<GameObject> _cellQuads;                            // List of cell quads instantiated in the scene
     private GameObject[] m_Nodes = new GameObject[6];               // List of user-placed nodes on the grid
+    private GameObject[] m_PlacableTiles = new GameObject[6];               // List of designer-placed placable tiles on the grid
     private GameObject selectionIndicator;
     #endregion
 
@@ -88,7 +89,7 @@ public class GridManager : MonoBehaviour
         // bool hitSomething = Physics.Raycast(worldRay, out _gridHit, 100);
         int layerMask = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
 
-        RaycastHit[] hits = Physics.RaycastAll(worldRay);
+        RaycastHit[] hits = Physics.RaycastAll(worldRay, 100, layerMask);
 
         if (hits.Length > 0)
         {
@@ -99,7 +100,7 @@ public class GridManager : MonoBehaviour
                 {
                     return false;
                 }
-                if (hit.collider.gameObject.CompareTag("GridCell"))
+                if (hit.collider.gameObject.CompareTag("PlacableActorTile"))
                 {
                     _gridHit = hit;
                     return true;
@@ -139,10 +140,10 @@ public class GridManager : MonoBehaviour
             // Temporary display
             if (selectionIndicator == null)
             {
-                selectionIndicator = _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
+                //selectionIndicator = _quadFactory.CreateQuad(pos, _grid, ref _cellQuads);
             } else
             {
-                selectionIndicator.transform.position = pos;
+                //selectionIndicator.transform.position = pos;
             }
 
             GridCell _gridCell;
@@ -189,11 +190,20 @@ public class GridManager : MonoBehaviour
     {
         // 1. Get all Start/end nodes in a collection
         m_Nodes = GameObject.FindGameObjectsWithTag("Node");
+        m_PlacableTiles = GameObject.FindGameObjectsWithTag("PlacableActorTile");
 
         // 2. For each object in coll, snap to its nearest grid -> should be at the center
-        for (int i = 0; i < m_Nodes.Length; i++)
+        SnapSelectedTilesToGrid(m_Nodes);
+
+        // 3. Same for placable actor tiles
+        SnapSelectedTilesToGrid(m_PlacableTiles);
+    }
+
+    private void SnapSelectedTilesToGrid(GameObject[] selectedTiles)
+    {
+        for (int i = 0; i < selectedTiles.Length; i++)
         {
-            GameObject m_Node = m_Nodes[i];
+            GameObject m_Node = selectedTiles[i];
             float offset = 0;// m_Node.GetComponent<SphereCollider>().radius;
 
             SnapToGrid(ref m_Node, offset);

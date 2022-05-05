@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] [Range(1, 10)] float m_SpawnRate;
 
-    [SerializeField] List<GameObject> m_SpawnsProduced = new List<GameObject>();
+    //[SerializeField] List<GameObject> m_SpawnsProduced = new List<GameObject>();
 
     private void Start()
     {
@@ -26,14 +26,11 @@ public class Spawner : MonoBehaviour
         Transform startPathTransform = pathObjectManager.m_StartPathNode.transform;
 
         GameObject newSpawn = Instantiate(m_SpawnPrefab, startingPosition, Quaternion.identity);
-        m_SpawnsProduced.Add(newSpawn);
+        //m_SpawnsProduced.Add(newSpawn);
         newSpawn.transform.SetParent(startPathTransform);
-
-        Debug.Log("Spawned new!");
 
         // Notify path starter to start handling newSpawn
         DispatchPathObject(newSpawn);
-
         StartCoroutine(SpawnInstance());
     }
 

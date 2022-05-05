@@ -7,7 +7,6 @@ public class TurretFactory : MonoBehaviour
     public static TurretFactory Instance { get; private set; }
     public GameObject TurretPrefab;
 
-
     private void Awake()
     {
         if (Instance == null)

@@ -22,23 +22,32 @@ public class Timer : MonoBehaviour
     public delegate void ZeroSecondsReached();
     public static ZeroSecondsReached OnZeroSecondsReached;
 
+    private void Start()
+    {
+        StartCoroutine(StartOneSecondTimer());
+        StartCoroutine(StartTenSecondsTimer());
+    }
+
+    private IEnumerator StartOneSecondTimer()
+    {
+        yield return new WaitForSeconds(1);
+        time -= ticksPerSecond;
+        m_Sb.Clear();
+        m_Sb.Append(m_TimeText);
+        m_Sb.Append(time);
+        m_TimerTextObject.text = m_Sb.ToString();
+        StartCoroutine(StartOneSecondTimer());
+    }
+
+    private IEnumerator StartTenSecondsTimer()
+    {
+        yield return new WaitForSeconds(10);
+        OnTenSecondsReached();
+        StartCoroutine(StartTenSecondsTimer());
+    }
+
     void Update()
     {
-        ++frameCount;
-        ++totalFrameCount;
-        if (frameCount >= 1.0f/Time.deltaTime)
-        {
-            time -= ticksPerSecond;
-            m_Sb.Clear();
-            m_Sb.Append(m_TimeText);
-            m_Sb.Append(time);
-            m_TimerTextObject.text = m_Sb.ToString();
-            frameCount = 0;
-        }
-        if(totalFrameCount % 10 == 0)
-        {
-            OnTenSecondsReached();
-        }
         if(time == 0)
         {
             OnZeroSecondsReached();
