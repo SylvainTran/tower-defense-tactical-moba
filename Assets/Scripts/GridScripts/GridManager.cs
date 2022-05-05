@@ -29,7 +29,7 @@ public class GridManager : MonoBehaviour
     private GameObject selectionIndicator;
     public int m_MaxPlaceableActors = 3;                            // Max amount of placeable actors on a level = should depend on the level itself. Test # for now
     public int m_CurrentlyPlacedActors = 0;
-    public static GameObject m_CurrentlySelectedActor = null;
+    public static GameObject m_CurrentAction = null;
     public Material m_ActorMovedColorMat;                           // Just to show a difference between selecting empty tiles vs. an actor
     public Material m_PlaceableTileColorMat;                        // Red
     public bool m_RaycastHitActor = false;
@@ -151,32 +151,42 @@ public class GridManager : MonoBehaviour
         {
             if (RaycastSpecificTile("Node", LayerMask.NameToLayer("Node")))
             {
-                m_RaycastHitActor = true;
+                m_RaycastHitActor = false;
 
                 // Display selector
                 PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
-                return;
-            } // Exit right away!
+            }
             if (RaycastSpecificTile("PlacableActorTile", LayerMask.NameToLayer("PlaceableActorTile")))
             {
+                // Allows to check whether to deselect later or not
                 m_RaycastHitActor = true;
 
                 // Display selector
                 PlaceSelectedTileIndicator(GetSelectorSnappedGridPos());
 
-                // Check if can place actor
-                GridCell _gridCell;
-                _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
-
-                if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
+                // Differentiate between moving existing actor or creating a new one
+                if (m_CurrentAction != null)
                 {
-                    // Snap it to nearest grid cell (lower left corner)
-                    m_CurrentlySelectedActor = TurretFactory.Instance.Create(GetSelectorSnappedGridPos());
-                    _gridCell.m_HasNode = true;
-                    m_CurrentlyPlacedActors++;
-                    PlaceActorIndicator();
+                    print("Moving existing hero to another tile!");
+                    m_CurrentAction.transform.position = GetSelectorSnappedGridPos();
+                }
+                else
+                {
+                    // Check if can place actor
+                    GridCell _gridCell;
+                    _gridCell = _gridHit.Value.collider.GetComponent<GridCell>();
+
+                    if (!_gridCell.m_HasNode && m_CurrentlyPlacedActors < m_MaxPlaceableActors)
+                    {
+                        // Snap it to nearest grid cell (lower left corner)
+                        m_CurrentAction = TurretFactory.Instance.Create(GetSelectorSnappedGridPos());
+                        _gridCell.m_HasNode = true;
+                        m_CurrentlyPlacedActors++;
+                        PlaceActorIndicator();
+                    }
                 }
             }
+            // Notice that it's the turret's body that has the box collider that we want, otherwise could hit its sphere collider (the hero's detection or attack radius)
             if (RaycastSpecificTile("TurretBody", LayerMask.NameToLayer("Turret")))
             {
                 m_RaycastHitActor = true;
@@ -185,16 +195,23 @@ public class GridManager : MonoBehaviour
 
                 GameObject actor = _gridHit.Value.collider.gameObject;
                 // TODO: Select hero/actor state
-                m_CurrentlySelectedActor = actor;
+                m_CurrentAction = actor;
 
                 // Display indicator
                 PlaceActorIndicator();
 
                 // Display its info
                 print("Selected actor info: Name =" + actor.GetComponent<Turret>().m_ActorName);
-                return;
             }
+
+            // Hit empty grid cell
             HandleDeselection();
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            // Confirm the current action
+            // TODO: show pop-up confirm dialog box or something
+            EndCurrentAction();
         }
     }
 
@@ -202,16 +219,18 @@ public class GridManager : MonoBehaviour
     {
         if (!m_RaycastHitActor)
         {
-            DeselectCurrentlySelectedActor();
+            // This is a bit weird but usage is to reset everything each frame where we
+            // clicked or something else than an actor
+            EndCurrentAction();
             HideSelector();
             _gridHit = null;
         }
         m_RaycastHitActor = false;
     }
 
-    private void DeselectCurrentlySelectedActor()
+    private void EndCurrentAction()
     {
-        m_CurrentlySelectedActor = null;  // Deselect also because user is trying to select a placeable tile to create a new actor
+        m_CurrentAction = null;  // Deselect also because user is trying to select a placeable tile to create a new actor
     }
 
     private void HideSelector()
@@ -220,8 +239,6 @@ public class GridManager : MonoBehaviour
         {
             selectionIndicator.transform.position = new Vector3(1000, 1000, 1000);
         }
-
-        print("Hiding selector");
     }
 
     public Vector3 GetSelectorSnappedGridPos()
@@ -248,11 +265,11 @@ public class GridManager : MonoBehaviour
 
     public void PlaceActorIndicator()
     {
-        if (m_CurrentlySelectedActor == null)
+        if (m_CurrentAction == null)
         {
             return;
         }
-        PlaceSelectedTileIndicator(m_CurrentlySelectedActor.transform.position);
+        PlaceSelectedTileIndicator(m_CurrentAction.transform.position);
         selectionIndicator.GetComponent<MeshRenderer>().material = m_ActorMovedColorMat;
     }
 
