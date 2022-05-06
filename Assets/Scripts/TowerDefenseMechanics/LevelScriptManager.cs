@@ -18,6 +18,9 @@ public class LevelScriptManager : MonoBehaviour
 
     public Enemy? m_CurrentEncounterAction; // current enemy that has triggered a dialogue
 
+    private Spawner[] m_Spawners;
+    public bool m_PauseSpawning = false;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -33,9 +36,25 @@ public class LevelScriptManager : MonoBehaviour
 
     void Start()
     {
+        m_Spawners = FindObjectsOfType<Spawner>();
+        
         HeroesInPlay = GameObject.FindGameObjectsWithTag("Hero");
 
         dialogueRunner.startNode = "CORE_AutomaticThoughts_Level01_01";
+        
+        InvokeRepeating("HandleSpawners", 0.0f, 3.0f);
+    }
+
+    public void HandleSpawners()
+    {
+        // Decide if should spawn now or wait
+        foreach (Spawner spawner in m_Spawners)
+        {
+            if (!m_PauseSpawning)
+            {
+                spawner.StartSpawning();   
+            }
+        }
     }
 
     public void StartNewCBTNode() {
@@ -62,19 +81,48 @@ public class LevelScriptManager : MonoBehaviour
         Time.timeScale = 1.0f;
     }
 
-    public void SlowDownEncounter()
+    public void PauseAllSpawners()
     {
-        if (m_CurrentEncounterAction != null)
+        m_PauseSpawning = true;
+
+        foreach (Spawner spawner in m_Spawners)
         {
-            m_CurrentEncounterAction.GetComponent<Enemy>().SlowDown();
-            m_CurrentEncounterAction.GetComponent<Enemy>().DisableCollider();
+            spawner.StopCoroutine("SpawnInstance");
         }
     }
 
-    public void ResetEncounterAction()
+    public void SlowDownEncounter(GameObject actor)
     {
-        m_CurrentEncounterAction.GetComponent<Enemy>().RestoreSpeed();
-        m_CurrentEncounterAction.GetComponent<Enemy>().EnableCollider();
+        if (actor != null)
+        {
+            actor.GetComponent<Enemy>().SetSpeed(0.0f);
+            actor.GetComponent<Enemy>().SetColliderState(false);
+        }
+    }
+
+    public void SlowDownAllActors()
+    {
+        foreach (GameObject enemy in TowerDefenseManager.Instance.m_EnemiesAlive)
+        {
+            SlowDownEncounter(enemy);
+        }
+    }
+    
+    public void RestoreAllActorsSpeed()
+    {
+        foreach (GameObject enemy in TowerDefenseManager.Instance.m_EnemiesAlive)
+        {
+            ResetEncounterAction(enemy);
+        }
+    }
+
+    public void ResetEncounterAction(GameObject actor)
+    {
+        if (actor != null)
+        {
+            actor.GetComponent<Enemy>().SetSpeed(5.0f);
+            actor.GetComponent<Enemy>().SetColliderState(true);
+        }
 
         m_CurrentEncounterAction = null;
     }
@@ -95,17 +143,17 @@ public class LevelScriptManager : MonoBehaviour
         if(!success)
         {
             print("Enemy won!");
-            ResetEncounterAction();
         } else
         {
             print("Hero won!");
-            if (Instance.m_CurrentEncounterAction != null)
+            if (m_CurrentEncounterAction != null)
             {
                 print("Destroying enemy");
                 // Not sure why this isn't working
-                Instance.m_CurrentEncounterAction.DestroyMe();
-                Instance.m_CurrentEncounterAction = null;
+                m_CurrentEncounterAction.DestroyMe();
+                m_CurrentEncounterAction = null;
             }
         }
+        m_PauseSpawning = false;
     }
 }

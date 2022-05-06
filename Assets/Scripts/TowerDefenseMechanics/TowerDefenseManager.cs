@@ -6,6 +6,8 @@ using UnityEngine;
 public class TowerDefenseManager : MonoBehaviour
 {
     public static TowerDefenseManager Instance;
+    
+    public List<GameObject> m_EnemiesAlive = new List<GameObject>();
 
     private void OnEnable()
     {
@@ -42,7 +44,8 @@ public class TowerDefenseManager : MonoBehaviour
             if (hud.m_HealthTextObject != null)
             {
                 print("Health Bar added");
-            } else
+            } 
+            else
             {
                 print("Health bar not found!");
             }

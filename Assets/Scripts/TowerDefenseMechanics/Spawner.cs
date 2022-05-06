@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,26 +12,34 @@ public class Spawner : MonoBehaviour
     [SerializeField] [Range(1, 10)] float m_SpawnRate;
 
     //[SerializeField] List<GameObject> m_SpawnsProduced = new List<GameObject>();
+    private PathObjectManager m_pathObjectManager;
+    private Vector3 startingPosition;
+    private Transform startPathTransform;
+    
+    public bool m_SpawnerIsPaused = false;
 
-    private void Start()
+    private void Awake()
     {
-        StartCoroutine(SpawnInstance());
+        m_pathObjectManager = m_SpawnPathStarter.GetComponent<PathObjectManager>();
+        startingPosition = m_pathObjectManager.GetStartingPosition();
+        startPathTransform = m_pathObjectManager.m_StartPathNode.transform;
     }
 
     private IEnumerator SpawnInstance()
     {
         yield return new WaitForSeconds(m_SpawnRate);
 
-        PathObjectManager pathObjectManager = m_SpawnPathStarter.GetComponent<PathObjectManager>();
-        Vector3 startingPosition = pathObjectManager.GetStartingPosition();
-        Transform startPathTransform = pathObjectManager.m_StartPathNode.transform;
-
         GameObject newSpawn = Instantiate(m_SpawnPrefab, startingPosition, Quaternion.identity);
-        //m_SpawnsProduced.Add(newSpawn);
+        TowerDefenseManager.Instance.m_EnemiesAlive.Add(newSpawn);
         newSpawn.transform.SetParent(startPathTransform);
 
         // Notify path starter to start handling newSpawn
         DispatchPathObject(newSpawn);
+    }
+
+    public void StartSpawning()
+    {
+        m_SpawnerIsPaused = false;
         StartCoroutine(SpawnInstance());
     }
 

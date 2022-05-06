@@ -22,24 +22,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void SlowDown()
+    public void SetSpeed(float speed)
     {
-        m_PathObject.m_TravelSpeed = 0.0f;
+        m_PathObject.m_TravelSpeed = speed;
     }
 
-    public void DisableCollider()
+    public void SetColliderState(bool state)
     {
-        m_SphereCollider.enabled = false;
-    }
-
-    public void RestoreSpeed()
-    {
-        m_PathObject.m_TravelSpeed = 1.0f;
-    }
-
-    public void EnableCollider()
-    {
-        m_SphereCollider.enabled = true;
+        m_SphereCollider.enabled = state;
     }
 
     public void DestroyMe()

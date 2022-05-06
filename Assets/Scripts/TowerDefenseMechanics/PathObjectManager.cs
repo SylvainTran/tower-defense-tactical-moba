@@ -40,7 +40,7 @@ public class PathObjectManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (m_ReadyQueue.Count > 0)
+        if (m_ReadyQueue.Count > 0 && !LevelScriptManager.Instance.m_PauseSpawning) // maybe should handle this in LevelScriptManager instead
         {
             StartPathing();
         }

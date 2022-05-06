@@ -60,6 +60,7 @@ public class PathObject : MonoBehaviour
                         // Player loses health
                         OnReachedPlayerEvent();
                         StopAllCoroutines();
+                        TowerDefenseManager.Instance.m_EnemiesAlive.Remove(gameObject);
                         Destroy(gameObject);
                     }
                     else
