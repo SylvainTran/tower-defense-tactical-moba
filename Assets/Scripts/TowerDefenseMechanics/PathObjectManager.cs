@@ -31,7 +31,10 @@ public class PathObjectManager : MonoBehaviour
 
         for (int i = 0; i < m_EndPathNodes.Count; i++)
         {
-            pathObject.GetComponent<PathObject>().m_EndPathNodes.Enqueue(m_EndPathNodes[i]);
+            if (pathObject != null) // Can be destroyed upon player's CBT dialogue success
+            {
+                pathObject.GetComponent<PathObject>().m_EndPathNodes.Enqueue(m_EndPathNodes[i]);   
+            }
         }
 
         // Move translate this particular path object across path until it reaches End Node
