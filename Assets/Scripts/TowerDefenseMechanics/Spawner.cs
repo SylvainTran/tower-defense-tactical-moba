@@ -2,14 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] GameObject m_SpawnPrefab;
+    [SerializeField] GameObject m_MinionPrefab;
+
+    [SerializeField] GameObject m_ChallengerPrefab;
 
     [SerializeField] GameObject m_SpawnPathStarter; // Start node of a network path, also notifies/wakes it to start path lerping
 
-    [SerializeField] [Range(1, 10)] float m_SpawnRate;
+    [SerializeField] [Range(1, 10)] float m_MinionSpawnRate;    
+    [SerializeField] [Range(1, 10)] float m_ChallengerSpawnRate;
 
     //[SerializeField] List<GameObject> m_SpawnsProduced = new List<GameObject>();
     private PathObjectManager m_pathObjectManager;
@@ -25,22 +29,41 @@ public class Spawner : MonoBehaviour
         startPathTransform = m_pathObjectManager.m_StartPathNode.transform;
     }
 
-    private IEnumerator SpawnInstance()
+    public void InstantiateSpawnPrefab(GameObject spawnPrefab, Vector3 startingPosition, Transform parent)
     {
-        yield return new WaitForSeconds(m_SpawnRate);
-
-        GameObject newSpawn = Instantiate(m_SpawnPrefab, startingPosition, Quaternion.identity);
+        GameObject newSpawn = Instantiate(spawnPrefab, startingPosition, Quaternion.identity);
         TowerDefenseManager.Instance.m_EnemiesAlive.Add(newSpawn);
-        newSpawn.transform.SetParent(startPathTransform);
+        newSpawn.transform.SetParent(parent);
 
         // Notify path starter to start handling newSpawn
         DispatchPathObject(newSpawn);
+    }
+    
+    private IEnumerator SpawnMinion()
+    {
+        yield return new WaitForSeconds(m_MinionSpawnRate);
+
+        InstantiateSpawnPrefab(m_MinionPrefab, startingPosition, startPathTransform);
+    }
+
+    private IEnumerator SpawnChallenger()
+    {
+        yield return new WaitForSeconds(m_ChallengerSpawnRate);
+
+        InstantiateSpawnPrefab(m_ChallengerPrefab, startingPosition, startPathTransform);
     }
 
     public void StartSpawning()
     {
         m_SpawnerIsPaused = false;
-        StartCoroutine(SpawnInstance());
+        StartCoroutine((SpawnMinion()));
+        float threshold = 33.3f;
+        UnityEngine.Random.InitState((int) DateTime.Now.Ticks);
+        // Uses XOR shift algorithm
+        if (UnityEngine.Random.Range(0, 100) < threshold)
+        {
+            StartCoroutine(SpawnChallenger());
+        }
     }
 
     private void DispatchPathObject(GameObject pathObject)

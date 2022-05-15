@@ -31,7 +31,19 @@ public class Projectile : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             // Destroy(other.gameObject);
-            Destroy(gameObject);
+            if (gameObject != null)
+            {
+                Minion minion = gameObject.GetComponent<Minion>();
+                Challenger challenger = gameObject.GetComponent<Challenger>();
+
+                if (minion)
+                {
+                    minion.DestroyMe();
+                } else if (challenger)
+                {
+                    challenger.DestroyMe();
+                }   
+            }
         }
     }
 

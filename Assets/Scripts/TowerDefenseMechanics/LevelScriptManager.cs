@@ -149,7 +149,6 @@ public class LevelScriptManager : MonoBehaviour
             if (m_CurrentEncounterAction != null)
             {
                 print("Destroying enemy");
-                // Not sure why this isn't working
                 m_CurrentEncounterAction.DestroyMe();
                 m_CurrentEncounterAction = null;
             }

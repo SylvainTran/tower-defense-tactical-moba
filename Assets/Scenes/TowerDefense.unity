@@ -32759,6 +32759,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
         type: 3}
+      propertyPath: m_MinionPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 8f259e0de85b64c238775f05108951f7,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_ChallengerPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 7aecd2e80a6dcc44a8429ddb7fa73d72,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
       propertyPath: m_SpawnPathStarter
       value: 
       objectReference: {fileID: 1078158516}
@@ -49386,6 +49398,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
         type: 3}
+      propertyPath: m_MinionPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 8f259e0de85b64c238775f05108951f7,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_ChallengerPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 7aecd2e80a6dcc44a8429ddb7fa73d72,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
       propertyPath: m_SpawnPathStarter
       value: 
       objectReference: {fileID: 1431680837}
@@ -54083,6 +54107,18 @@ PrefabInstance:
       propertyPath: m_SpawnRate
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_MinionPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 8f259e0de85b64c238775f05108951f7,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_ChallengerPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 7aecd2e80a6dcc44a8429ddb7fa73d72,
+        type: 3}
     - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
         type: 3}
       propertyPath: m_SpawnPathStarter
@@ -76256,6 +76292,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 45cd82700b0378d4787973e9ed050865, type: 2}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_MinionPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 8f259e0de85b64c238775f05108951f7,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_ChallengerPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 7aecd2e80a6dcc44a8429ddb7fa73d72,
+        type: 3}
     - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
         type: 3}
       propertyPath: m_SpawnPathStarter
@@ -98604,6 +98652,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6694135179635089697, guid: b60ebfa0a6e1b0246b2fb39b7ef2c61a,
         type: 3}
+      propertyPath: m_PlayerBase
+      value: 
+      objectReference: {fileID: 1042472152}
+    - target: {fileID: 6694135179635089697, guid: b60ebfa0a6e1b0246b2fb39b7ef2c61a,
+        type: 3}
       propertyPath: TurretProjectilePrefab
       value: 
       objectReference: {fileID: 5038201863965727300, guid: 3c02b6670aff5204ebe081d48522b247,
@@ -99176,6 +99229,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 45cd82700b0378d4787973e9ed050865, type: 2}
     - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
         type: 3}
+      propertyPath: m_MinionPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 8f259e0de85b64c238775f05108951f7,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
+      propertyPath: m_ChallengerPrefab
+      value: 
+      objectReference: {fileID: 876717384839535351, guid: 7aecd2e80a6dcc44a8429ddb7fa73d72,
+        type: 3}
+    - target: {fileID: 7611977075794611854, guid: 42c527b89ce90b74fac36ae1a505b231,
+        type: 3}
       propertyPath: m_SpawnPathStarter
       value: 
       objectReference: {fileID: 1768163965}
@@ -99188,6 +99253,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5313676941284674713, guid: 0dbde8c9aca25bd4da9ffc648f2758c4,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000,
+        type: 0}
     - target: {fileID: 5313676941284674713, guid: 0dbde8c9aca25bd4da9ffc648f2758c4,
         type: 3}
       propertyPath: m_Name

@@ -5,12 +5,12 @@ tags:
 
 Anxiety: The world is a bad place.
 
--> ... If it was true, then why are there so many good people and things in life?
-    HeroA: ***Your attack landed!*** 
-    Anxiety: I-I... You defeated me.
+->  If it was true, then why are there so many good people and things in life?
+    HeroA: ***Your attack landed!***
+    Anxiety: I am defeated.
     <<set $action_outcome to true>>
 
--> ... Maybe you're right. Maybe I should hide inside all day long.
+->  Maybe you're right. Maybe I should hide inside all day long.
     Anxiety: ***Your attack missed!***
 
 ===
@@ -20,15 +20,15 @@ tags:
 ---
 <<set $action_outcome to false>>
 
-Depression: I'm never going to be liked by someone.
+Depression: I'm never going to find purpose and happiness.
 
--> ... That is unlikely.
+->  If that was true, then why did you smile this morning?
     HeroA: ***Your attack landed!*** 
-    Depression: Most people are liked by someone.
+    Depression: DAMN YOU.
     <<set $action_outcome to true>>
 
--> ... Only if I behave well.
+->  You're right, I'm done.
     HeroA: ***Your attack missed!***
-    Depression: Being liked is unconditional.
+    Depression: GYAHAH, KEKEKE!
 
 ===

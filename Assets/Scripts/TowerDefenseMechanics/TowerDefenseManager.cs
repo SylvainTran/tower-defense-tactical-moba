@@ -11,11 +11,13 @@ public class TowerDefenseManager : MonoBehaviour
 
     private void OnEnable()
     {
+        Timer.OnTenSecondsReached += SpawnMinionWave;
         Timer.OnTenSecondsReached += ResetPlayerHand;
         Timer.OnZeroSecondsReached += EndLevel;
     }
     private void OnDisable()
     {
+        Timer.OnTenSecondsReached -= SpawnMinionWave;
         Timer.OnTenSecondsReached -= ResetPlayerHand;
         Timer.OnZeroSecondsReached -= EndLevel;
     }
@@ -33,34 +35,15 @@ public class TowerDefenseManager : MonoBehaviour
 
         // Show the player's city in this scene
         GameManager.HidePlayerCity(2, true);
-
+        
         // Add the health text object on the hud if needed for this scene
         PlayerManager playerManager = FindObjectOfType<PlayerManager>();
-        Hud hud = playerManager.GetComponent<Hud>();
+        Hud hud = playerManager.gameObject.GetComponent<Hud>();
 
-        if (hud.m_HealthTextObject == null)
+        if (hud != null)
         {
             hud.m_HealthTextObject = GameObject.FindGameObjectWithTag("Health Bar").GetComponent<TMP_Text>();
-            if (hud.m_HealthTextObject != null)
-            {
-                print("Health Bar added");
-            } 
-            else
-            {
-                print("Health bar not found!");
-            }
-        }
-        if (hud.m_TurretTextObject == null)
-        {
             hud.m_TurretTextObject = GameObject.FindGameObjectWithTag("TurretTextObject").GetComponent<TMP_Text>();
-            if (hud.m_TurretTextObject != null)
-            {
-                print("Turret text object count added");
-            }
-            else
-            {
-                print("Turret text object not found!");
-            }
         }
     }
 
@@ -68,6 +51,11 @@ public class TowerDefenseManager : MonoBehaviour
     {
         GridManager.Instance.SnapObjectsToGridEditorTime();
         GridManager.Instance.m_CurrentlyPlacedActors = 0; // Reset
+    }
+
+    public void SpawnMinionWave()
+    {
+        
     }
 
     public void ResetPlayerHand()

@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(GameManager))]
 public class PlayerManager : MonoBehaviour
 {
-    public static int PlayerHealth = 500;
+    public static int PlayerHealth = 1000;
     public delegate void PlayerHealthIsZero();
     public static event PlayerHealthIsZero OnPlayerHealthIsZero;
 
